@@ -5,6 +5,6 @@
   uses: ./ 
   with: 
     filePath: 'playwright-report/test-results.json'
-    buildName: PR-1 
+    channel: 'e2e-tests'
     slackToken: ${{ secrets.SLACK_TOKEN }} 
 ```
