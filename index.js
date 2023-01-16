@@ -54,9 +54,6 @@ async function run() {
     const message = {
       blocks: [
         {
-          type: "divider",
-        },
-        {
           type: "section",
           text: {
             type: "mrkdwn",
@@ -86,15 +83,18 @@ async function run() {
             text: `*Total duration:* ${totalDuration / 1000}s`,
           },
         },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: ":rotating_light: *Errors:*",
-          },
-        },
       ],
     };
+
+    if (failed.length > 0) {
+      message.blocks.push({
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: ":rotating_light: *Errors:*",
+        },
+      });
+    }
 
     failed.slice(0, 10).forEach((test) => {
       message.blocks.push(
