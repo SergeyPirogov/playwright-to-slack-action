@@ -108,7 +108,7 @@ async function run() {
               emoji: true,
             },
             value: "click_me_123",
-            url: `https://github.com/${GITHUB_REPOSITORY}/qa/actions/runs/${GITHUB_RUN_ID}`,
+            url: `https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`,
             action_id: "button-action",
           },
         },
