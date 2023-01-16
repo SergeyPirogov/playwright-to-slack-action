@@ -14,6 +14,10 @@ inputs:
   channel:
     description: "Slack channel name"
     required: true
+  environment:
+    description: "Testing environment"
+    required: false
+    default: ""
 runs:
   using: "node16"
   main: "index.js"
