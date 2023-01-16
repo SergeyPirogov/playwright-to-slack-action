@@ -1,4 +1,4 @@
-** Playwirght action
+**Playwirght to Slack action**
 
 ```
 - name: Playright to Slack
