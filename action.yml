@@ -1,16 +1,19 @@
-name: 'Playright to Slack'
-description: 'Publish playwright results to Slack'
+name: "Playright to Slack"
+description: "Publish playwright results to Slack"
 branding:
-  icon: 'award'  
-  color: 'green'
+  icon: "award"
+  color: "green"
 inputs:
   filePath:
-    description: 'Playwright json file'
+    description: "Playwright json file"
     required: false
-    default: './playwright-report/test-results.json'
+    default: "./playwright-report/test-results.json"
   slackToken:
-    description: 'Github token of the repository (automatically created by Github)'
+    description: "Github token of the repository (automatically created by Github)"
+    required: true
+  channel:
+    description: "Slack channel name"
     required: true
 runs:
-  using: 'node16'
-  main: 'index.js'
+  using: "node16"
+  main: "index.js"
