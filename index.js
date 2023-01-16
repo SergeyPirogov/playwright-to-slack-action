@@ -7,6 +7,10 @@ async function run() {
     const filePath = core.getInput("filePath");
     const slackToken = core.getInput("slackToken");
     const channel = core.getInput("channel");
+    const environment = core.getInput("environment");
+
+    const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
+    const GITHUB_RUN_ID = process.env.GITHUB_RUN_ID;
 
     const rawData = fs.readFileSync(filePath);
     const report = JSON.parse(rawData);
@@ -61,6 +65,13 @@ async function run() {
           },
         },
         {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `Environment: ${environment}`,
+          },
+        },
+        {
           type: "divider",
         },
         {
@@ -81,6 +92,24 @@ async function run() {
           text: {
             type: "mrkdwn",
             text: `*Total duration:* ${totalDuration / 1000}s`,
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "Details",
+          },
+          accessory: {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: "Open",
+              emoji: true,
+            },
+            value: "click_me_123",
+            url: `https://github.com/${GITHUB_REPOSITORY}/qa/actions/runs/${GITHUB_RUN_ID}`,
+            action_id: "button-action",
           },
         },
       ],
