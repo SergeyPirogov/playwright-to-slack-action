@@ -79,11 +79,11 @@ async function run() {
           fields: [
             {
               type: "mrkdwn",
-              text: `:white_check_mark: *Passed:* ${passed.length}`,
+              text: `:white_check_mark: *Passed:*\n${passed.length}`,
             },
             {
               type: "mrkdwn",
-              text: `:x: *Failed:* ${failed.length}`,
+              text: `:x: *Failed:*\n${failed.length}`,
             },
           ],
         },
