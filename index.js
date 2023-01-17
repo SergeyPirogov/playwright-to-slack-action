@@ -91,7 +91,7 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `*Total duration:* ${totalDuration / 1000}s`,
+            text: `*Total duration:* ${(totalDuration / 1000)/60}min`,
           },
         },
         {
