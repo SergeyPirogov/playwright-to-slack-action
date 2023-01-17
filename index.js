@@ -99,7 +99,7 @@ async function run() {
           text: {
             type: "mrkdwn",
             text: `<https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}|Details>`,
-          }
+          },
         },
       ],
     };
@@ -114,8 +114,8 @@ async function run() {
       });
     }
 
-    passed.forEach((test) => {
-      message.slice(0, 10).blocks.push(
+    passed.slice(0, 10).forEach((test) => {
+      message.blocks.push(
         {
           type: "divider",
         },
