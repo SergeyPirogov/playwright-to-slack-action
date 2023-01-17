@@ -98,19 +98,8 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "Details",
-          },
-          accessory: {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: "Open",
-              emoji: true,
-            },
-            value: "click_me_123",
-            url: `https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`,
-            action_id: "button-action",
-          },
+            text: `<https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}|Details>`,
+          }
         },
       ],
     };
@@ -126,7 +115,7 @@ async function run() {
     }
 
     passed.forEach((test) => {
-      message.blocks.push(
+      message.slice(0, 10).blocks.push(
         {
           type: "divider",
         },
