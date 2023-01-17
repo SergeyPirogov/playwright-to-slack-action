@@ -104,31 +104,6 @@ async function run() {
       ],
     };
 
-    if (passed.length > 0) {
-      message.blocks.push({
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: ":large_green_circle:*Passed*:",
-        },
-      });
-    }
-
-    passed.slice(0, 10).forEach((test) => {
-      message.blocks.push(
-        {
-          type: "divider",
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `*${test.title}* (${(test.duration / 1000).toFixed(2)}s)`,
-          },
-        }
-      );
-    });
-
     if (failed.length > 0) {
       message.blocks.push({
         type: "section",
