@@ -9,7 +9,7 @@ inputs:
     required: false
     default: "./playwright-report/test-results.json"
   slackToken:
-    description: "Github token of the repository (automatically created by Github)"
+    description: "Slack token"
     required: true
   channel:
     description: "Slack channel name"
