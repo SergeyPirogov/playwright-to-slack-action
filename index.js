@@ -94,7 +94,7 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `*${test.title}* (${(test.duration / 1000).toFixed(2)}s)\n${test.file}`,
+            text: `>*${test.title}* (${(test.duration / 1000).toFixed(2)}s)\n${test.file}`,
           },
         },
         {
