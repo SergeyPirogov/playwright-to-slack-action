@@ -2,9 +2,19 @@ const core = require("@actions/core");
 const fs = require("fs");
 const { WebClient } = require("@slack/web-api");
 
+function stripAnsiCodes(str) {
+  if (!str) {
+    return str;
+  }
+  return str.replace(
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    ""
+  );
+}
+
 async function run() {
   try {
-    const filePath = core.getInput("filePath") || './test-results.json';
+    const filePath = core.getInput("filePath") || "./test-results.json";
     const slackToken = core.getInput("slackToken");
     const channel = core.getInput("channel");
     const environment = core.getInput("environment");
@@ -94,7 +104,9 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `> *${test.title}* (${(test.duration / 1000).toFixed(2)}s)\n${test.file}`,
+            text: `> *${test.title}* (${(test.duration / 1000).toFixed(2)}s)\n${
+              test.file
+            }`,
           },
         },
         {
@@ -143,7 +155,7 @@ function calculateStats(report) {
           const testTitle = spec.title;
           const file = spec.file;
           const status = result.status;
-          const errorMessage = result.error?.message;
+          const errorMessage = stripAnsiCodes(result.error?.message);
           const duration = result.duration;
 
           const testResult = {
@@ -156,7 +168,7 @@ function calculateStats(report) {
 
           if (status === "passed") {
             passed.push(testResult);
-          } else  {
+          } else {
             failed.push(testResult);
           }
 
