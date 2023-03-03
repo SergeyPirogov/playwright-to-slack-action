@@ -2,9 +2,19 @@ const core = require("@actions/core");
 const fs = require("fs");
 const { WebClient } = require("@slack/web-api");
 
+function stripAnsiCodes(str) {
+  if (!str) {
+    return str;
+  }
+  return str.replace(
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    ""
+  );
+}
+
 async function run() {
   try {
-    const filePath = core.getInput("filePath");
+    const filePath = core.getInput("filePath") || "./test-results.json";
     const slackToken = core.getInput("slackToken");
     const channel = core.getInput("channel");
     const environment = core.getInput("environment");
@@ -16,45 +26,7 @@ async function run() {
     const rawData = fs.readFileSync(filePath);
     const report = JSON.parse(rawData);
 
-    const suites = report.suites;
-
-    const passed = [];
-    const failed = [];
-    const skipped = [];
-    let totalDuration = 0;
-
-    for (const suite of suites) {
-      const specs = suite.specs;
-      for (const spec of specs) {
-        const tests = spec.tests;
-        for (const test of tests) {
-          const results = test.results;
-          for (const result of results) {
-            const testTitle = spec.title;
-            const status = result.status;
-            const errorMessage = result.error?.message;
-            const duration = result.duration;
-
-            const testResult = {
-              title: testTitle,
-              status,
-              errorMessage,
-              duration,
-            };
-
-            if (status === "passed") {
-              passed.push(testResult);
-            } else if (status === "failed") {
-              failed.push(testResult);
-            } else {
-              skipped.push(testResult);
-            }
-
-            totalDuration += duration;
-          }
-        }
-      }
-    }
+    const { workers, totalDuration, passed, failed } = calculateStats(report);
 
     const message = {
       blocks: [
@@ -70,6 +42,13 @@ async function run() {
           text: {
             type: "mrkdwn",
             text: `Environment: ${environment}`,
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `Workers: ${workers}`,
           },
         },
         {
@@ -133,7 +112,9 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `*${test.title}* (${(test.duration / 1000).toFixed(2)}s)`,
+            text: `> *${test.title}* (${(test.duration / 1000).toFixed(2)}s)\n${
+              test.file
+            }`,
           },
         },
         {
@@ -162,6 +143,50 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
+}
+
+function calculateStats(report) {
+  const suites = report.suites;
+  const workers = report.config.workers;
+
+  const passed = [];
+  const failed = [];
+  let totalDuration = 0;
+
+  for (const suite of suites) {
+    const specs = suite.specs;
+    for (const spec of specs) {
+      const tests = spec.tests;
+      for (const test of tests) {
+        const results = test.results;
+        for (const result of results) {
+          const testTitle = spec.title;
+          const file = spec.file;
+          const status = result.status;
+          const errorMessage = stripAnsiCodes(result.error?.message);
+          const duration = result.duration;
+
+          const testResult = {
+            file,
+            title: testTitle,
+            status,
+            errorMessage,
+            duration,
+          };
+
+          if (status === "passed") {
+            passed.push(testResult);
+          } else {
+            failed.push(testResult);
+          }
+
+          totalDuration += duration;
+        }
+      }
+    }
+  }
+
+  return { workers, totalDuration, passed, failed };
 }
 
 run();
