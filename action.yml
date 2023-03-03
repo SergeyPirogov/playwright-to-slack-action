@@ -18,6 +18,10 @@ inputs:
     description: "Testing environment"
     required: false
     default: ""
+  filter:
+    description: "Testing filter"
+    required: false
+    default: ""
 runs:
   using: "node16"
   main: "index.js"

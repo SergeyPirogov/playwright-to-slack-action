@@ -8,6 +8,7 @@ async function run() {
     const slackToken = core.getInput("slackToken");
     const channel = core.getInput("channel");
     const environment = core.getInput("environment");
+    const filter = core.getInput("filter");
 
     const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
     const GITHUB_RUN_ID = process.env.GITHUB_RUN_ID;
@@ -72,6 +73,13 @@ async function run() {
           },
         },
         {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `Filter: ${filter}`,
+          },
+        },
+        {
           type: "divider",
         },
         {
@@ -91,7 +99,9 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `*Total duration:* ${((totalDuration / 1000)/60).toFixed(2)}min`,
+            text: `*Total duration:* ${(totalDuration / 1000 / 60).toFixed(
+              2
+            )}min`,
           },
         },
         {
