@@ -176,6 +176,8 @@ function calculateStats(report) {
 
           if (status === "passed") {
             passed.push(testResult);
+          } else if (status === "skipped") {
+            continue;
           } else {
             failed.push(testResult);
           }
