@@ -23,7 +23,7 @@ async function run() {
     const filter = core.getInput("filter");
     const ghToken = core.getInput("ghToken");
 
-    const GITHUB_REPOSITORY = github.repository;
+    const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
     const GITHUB_RUN_ID = github.run_id;
 
     const rawData = fs.readFileSync(filePath);
