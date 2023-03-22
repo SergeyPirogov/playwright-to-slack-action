@@ -29,7 +29,7 @@ async function run() {
     const rawData = fs.readFileSync(filePath);
     const report = JSON.parse(rawData);
 
-    const octokit = new github.getOctokit(github.token);
+    const octokit = new github.getOctokit(ghToken);
 
     const repository = GITHUB_REPOSITORY.split("/")[1];
 
