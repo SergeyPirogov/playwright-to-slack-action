@@ -11,6 +11,9 @@ inputs:
   slackToken:
     description: "Slack token"
     required: true
+  ghToken:
+    description: "Github token"
+    required: true
   channel:
     description: "Slack channel name"
     required: true

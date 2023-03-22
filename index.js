@@ -21,6 +21,7 @@ async function run() {
     const channel = core.getInput("channel");
     const environment = core.getInput("environment");
     const filter = core.getInput("filter");
+    const ghToken = core.getInput("ghToken");
 
     const GITHUB_REPOSITORY = github.repository;
     const GITHUB_RUN_ID = github.run_id;
