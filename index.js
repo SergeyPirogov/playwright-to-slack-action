@@ -1,4 +1,6 @@
 const core = require("@actions/core");
+const github = require("@actions/github");
+
 const fs = require("fs");
 const { WebClient } = require("@slack/web-api");
 
@@ -20,11 +22,23 @@ async function run() {
     const environment = core.getInput("environment");
     const filter = core.getInput("filter");
 
-    const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
-    const GITHUB_RUN_ID = process.env.GITHUB_RUN_ID;
+    const GITHUB_REPOSITORY = github.repository;
+    const GITHUB_RUN_ID = github.run_id;
 
     const rawData = fs.readFileSync(filePath);
     const report = JSON.parse(rawData);
+
+    const octokit = new github.getOctokit(github.token);
+
+    const repository = GITHUB_REPOSITORY.split("/")[1];
+
+    const workflowRun = await octokit.rest.actions.getWorkflowRun({
+      owner: github.repository_owner,
+      repo: repository,
+      run_id: GITHUB_RUN_ID,
+    });
+
+    console.log(JSON.stringify(workflowRun, null, 2));
 
     const { workers, totalDuration, passed, failed } = calculateStats(report);
 
