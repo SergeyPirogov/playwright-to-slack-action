@@ -24,24 +24,26 @@ async function run() {
     const ghToken = core.getInput("ghToken");
 
     const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
-    const GITHUB_RUN_ID = github.run_id;
+    const GITHUB_RUN_ID = process.env.GITHUB_RUN_ID;
 
     const rawData = fs.readFileSync(filePath);
     const report = JSON.parse(rawData);
 
     const octokit = new github.getOctokit(ghToken);
     const repository = GITHUB_REPOSITORY.split("/")[1];
-
+    const owner = GITHUB_REPOSITORY.split("/")[0];
+    
+    console.log(owner)
     console.log(repository)
     console.log(GITHUB_RUN_ID)
-    console.log(GITHUB_REPOSITORY)
-//     const workflowRun = await octokit.rest.actions.getWorkflowRun({
-//       owner: github.repository_owner,
-//       repo: repository,
-//       run_id: GITHUB_RUN_ID,
-//     });
+    
+    const workflowRun = await octokit.rest.actions.getWorkflowRun({
+      owner: owner,
+      repo: repository,
+      run_id: GITHUB_RUN_ID,
+    });
 
-//     console.log(JSON.stringify(workflowRun, null, 2));
+    console.log(JSON.stringify(workflowRun, null, 2));
 
     const { workers, totalDuration, passed, failed } = calculateStats(report);
 
