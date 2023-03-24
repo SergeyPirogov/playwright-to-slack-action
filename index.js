@@ -212,6 +212,8 @@ async function getDuration(github_token, github_repository, runId) {
       runId,
     });
 
+    console.log(JSON.stringify(runInfo, null, 2));
+
     const run_started_at = runInfo.data.updated_at;
 
     const date = new Date(run_started_at);
@@ -229,6 +231,7 @@ async function getDuration(github_token, github_repository, runId) {
     console.log(duration);
     return duration;
   } catch (error) {
+    console.error(error);
     return "";
   }
 }
