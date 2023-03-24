@@ -24,7 +24,7 @@ async function run() {
     const ghToken = core.getInput("ghToken");
 
     const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
-    const GITHUB_RUN_ID = github.run_id;
+    const GITHUB_RUN_ID = process.env.GITHUB_RUN_ID;
 
     const duration = await getDuration(
       ghToken,
