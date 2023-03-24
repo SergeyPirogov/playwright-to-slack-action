@@ -24,24 +24,18 @@ async function run() {
     const ghToken = core.getInput("ghToken");
 
     const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
-    const GITHUB_RUN_ID = github.run_id;
+    const GITHUB_RUN_ID = process.env.GITHUB_RUN_ID;
+
+    const duration = await getDuration(
+      ghToken,
+      GITHUB_REPOSITORY,
+      GITHUB_RUN_ID
+    );
 
     const rawData = fs.readFileSync(filePath);
     const report = JSON.parse(rawData);
 
-    const octokit = new github.getOctokit(ghToken);
-
-    const repository = GITHUB_REPOSITORY.split("/")[1];
-
-    const workflowRun = await octokit.rest.actions.getWorkflowRun({
-      owner: github.repository_owner,
-      repo: repository,
-      run_id: GITHUB_RUN_ID,
-    });
-
-    console.log(JSON.stringify(workflowRun, null, 2));
-
-    const { workers, totalDuration, passed, failed } = calculateStats(report);
+    const { workers, passed, failed } = calculateStats(report);
 
     const message = {
       blocks: [
@@ -93,9 +87,7 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `*Total duration:* ${(totalDuration / 1000 / 60).toFixed(
-              2
-            )}min`,
+            text: `*Total duration:* ${duration}`,
           },
         },
         {
@@ -204,6 +196,36 @@ function calculateStats(report) {
   }
 
   return { workers, totalDuration, passed, failed };
+}
+
+async function getDuration(github_token, repo, runId) {
+  const octokit = new github.getOctokit(github_token);
+
+  const repo = GITHUB_REPOSITORY.split("/")[1];
+  const owner = GITHUB_REPOSITORY.split("/")[0];
+
+  const runInfo = await octokit.rest.actions.getWorkflowRun({
+    owner,
+    repo,
+    run_id,
+  });
+
+  const run_started_at = runInfo.data.updated_at;
+
+  const date = new Date(run_started_at);
+
+  const now = new Date();
+  const diffInMilliseconds = now.getTime() - date.getTime();
+  const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+
+  const duration = `${diffInHours % 24} hours, ${
+    diffInMinutes % 60
+  } minutes, and ${diffInSeconds % 60} seconds`;
+
+  console.log(duration);
+  return duration;
 }
 
 run();
