@@ -201,6 +201,12 @@ function calculateStats(report) {
 async function getDuration(github_token, github_repository, runId) {
   console.log(github_repository);
   console.log(runId);
+
+  if (!github_token) {
+    console.log("`Github TOKEN is not set");
+    return "";
+  }
+
   try {
     const repo = github_repository.split("/")[1];
     const owner = github_repository.split("/")[0];
