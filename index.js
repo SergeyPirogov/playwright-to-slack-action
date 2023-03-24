@@ -198,11 +198,11 @@ function calculateStats(report) {
   return { workers, totalDuration, passed, failed };
 }
 
-async function getDuration(github_token, repo, runId) {
+async function getDuration(github_token, github_repository, runId) {
   const octokit = new github.getOctokit(github_token);
 
-  const repo = GITHUB_REPOSITORY.split("/")[1];
-  const owner = GITHUB_REPOSITORY.split("/")[0];
+  const repo = github_repository.split("/")[1];
+  const owner = github_repository.split("/")[0];
 
   const runInfo = await octokit.rest.actions.getWorkflowRun({
     owner,
