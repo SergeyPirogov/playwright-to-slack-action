@@ -208,19 +208,19 @@ async function getDuration(github_token, github_repository, runId) {
   }
 
   try {
-    const repo = github_repository.split("/")[1];
     const owner = github_repository.split("/")[0];
+    const repository = github_repository.split("/")[1];
 
     const octokit = new github.getOctokit(github_token);
-    const runInfo = await octokit.rest.actions.getWorkflowRun({
-      owner,
-      repo,
-      runId,
+    const workflowRun = await octokit.rest.actions.getWorkflowRun({
+      owner: owner,
+      repo: repository,
+      run_id: runId,
     });
 
-    console.log(JSON.stringify(runInfo, null, 2));
+    console.log(JSON.stringify(workflowRun, null, 2));
 
-    const run_started_at = runInfo.data.updated_at;
+    const run_started_at = workflowRun.data.updated_at;
 
     const date = new Date(run_started_at);
 
@@ -237,7 +237,7 @@ async function getDuration(github_token, github_repository, runId) {
     console.log(duration);
     return duration;
   } catch (error) {
-    console.error(error);
+    console.error("ERROR "+ error);
     return "";
   }
 }
