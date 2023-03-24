@@ -199,9 +199,6 @@ function calculateStats(report) {
 }
 
 async function getDuration(github_token, github_repository, runId) {
-  console.log(github_repository);
-  console.log(runId);
-
   if (!github_token) {
     console.log("`Github TOKEN is not set");
     return "";
@@ -211,6 +208,10 @@ async function getDuration(github_token, github_repository, runId) {
     const owner = github_repository.split("/")[0];
     const repository = github_repository.split("/")[1];
 
+    console.log(owner);
+    console.log(repository);
+    console.log(runId);
+    
     const octokit = new github.getOctokit(github_token);
     const workflowRun = await octokit.rest.actions.getWorkflowRun({
       owner: owner,
