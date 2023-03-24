@@ -200,7 +200,7 @@ function calculateStats(report) {
 
 async function getDuration(github_token, github_repository, runId) {
   console.log(github_repository);
-  console.log(duration);
+  console.log(runId);
   try {
     const repo = github_repository.split("/")[1];
     const owner = github_repository.split("/")[0];
