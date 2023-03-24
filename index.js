@@ -207,7 +207,7 @@ async function getDuration(github_token, repo, runId) {
   const runInfo = await octokit.rest.actions.getWorkflowRun({
     owner,
     repo,
-    run_id,
+    runId,
   });
 
   const run_started_at = runInfo.data.updated_at;
