@@ -199,33 +199,38 @@ function calculateStats(report) {
 }
 
 async function getDuration(github_token, github_repository, runId) {
-  const octokit = new github.getOctokit(github_token);
-
-  const repo = github_repository.split("/")[1];
-  const owner = github_repository.split("/")[0];
-
-  const runInfo = await octokit.rest.actions.getWorkflowRun({
-    owner,
-    repo,
-    runId,
-  });
-
-  const run_started_at = runInfo.data.updated_at;
-
-  const date = new Date(run_started_at);
-
-  const now = new Date();
-  const diffInMilliseconds = now.getTime() - date.getTime();
-  const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  const diffInHours = Math.floor(diffInMinutes / 60);
-
-  const duration = `${diffInHours % 24} hours, ${
-    diffInMinutes % 60
-  } minutes, and ${diffInSeconds % 60} seconds`;
-
+  console.log(github_repository);
   console.log(duration);
-  return duration;
+  try {
+    const repo = github_repository.split("/")[1];
+    const owner = github_repository.split("/")[0];
+
+    const octokit = new github.getOctokit(github_token);
+    const runInfo = await octokit.rest.actions.getWorkflowRun({
+      owner,
+      repo,
+      runId,
+    });
+
+    const run_started_at = runInfo.data.updated_at;
+
+    const date = new Date(run_started_at);
+
+    const now = new Date();
+    const diffInMilliseconds = now.getTime() - date.getTime();
+    const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+
+    const duration = `${diffInHours % 24} hours, ${
+      diffInMinutes % 60
+    } minutes, and ${diffInSeconds % 60} seconds`;
+
+    console.log(duration);
+    return duration;
+  } catch (error) {
+    return "";
+  }
 }
 
 run();
