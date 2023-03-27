@@ -8,10 +8,16 @@ function stripAnsiCodes(str) {
   if (!str) {
     return str;
   }
-  return str.replace(
+  const result = str.replace(
     /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
     ""
   );
+
+  if (result.length > 3001) {
+    return result.substring(0, 3000);
+  }
+
+  return result;
 }
 
 async function run() {
@@ -231,7 +237,7 @@ async function getDuration(github_token, github_repository, runId) {
 
     return duration;
   } catch (error) {
-    console.error("ERROR "+ error);
+    console.error("ERROR " + error);
     return "";
   }
 }
