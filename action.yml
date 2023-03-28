@@ -25,6 +25,10 @@ inputs:
     description: "Testing filter"
     required: false
     default: ""
+  reportUrl:
+    description: "Report url"
+    required: false
+    default: ""
 runs:
   using: "node16"
   main: "index.js"

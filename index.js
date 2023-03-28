@@ -28,6 +28,7 @@ async function run() {
     const environment = core.getInput("environment");
     const filter = core.getInput("filter");
     const ghToken = core.getInput("ghToken");
+    const reportUrl = core.getInput("reportUrl");
 
     const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
     const GITHUB_RUN_ID = process.env.GITHUB_RUN_ID;
@@ -107,6 +108,27 @@ async function run() {
     };
 
     if (failed.length > 0) {
+      if (reportUrl) {
+        message.blocks.push({
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "Execution report ",
+          },
+          accessory: {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: "Open",
+              emoji: true,
+            },
+            value: "click_me_123",
+            url: reportUrl,
+            action_id: "button-action",
+          },
+        });
+      }
+
       message.blocks.push({
         type: "section",
         text: {
