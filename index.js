@@ -156,7 +156,7 @@ async function run() {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "```" + test.errorMessage + "```",
+            text: "```" + test.errorMessage.substring(0, 3000) + "```",
           },
         }
       );
